@@ -1,0 +1,7 @@
+"""Configuration options
+"""
+
+ln_environment = 'someserver.lexisnexis.com'
+ln_project_id = 'youruser@email.com'
+ln_username = 'username@wsk'
+ln_password = 'password'
