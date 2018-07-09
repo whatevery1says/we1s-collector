@@ -76,7 +76,7 @@ def search_query(session, query_idx, qrow, bagify=True):
                 logging.info(name, 'JSON write failed', error)
 
 
-def search_querylist(session, fname='queries.csv'):
+def search_querylist(session, fname='queries.csv', bagify=True):
     """For a list of queries in csv format:
 
         source_title,source_id,keyword_string,begin_date,end_date
@@ -104,7 +104,8 @@ def search_querylist(session, fname='queries.csv'):
                                'keyword_string':row['keyword_string'],
                                'begin_date':row['begin_date'],
                                'end_date':row['end_date']
-                              }
+                              },
+                         bagify=bagify
                         )
 
 
@@ -117,6 +118,6 @@ logging.basicConfig(datefmt='%m/%d/%Y %I:%M:%S %p',
 
 MY_SESSION = get_authenticated_session()
 
-search_querylist(MY_SESSION, 'queries.csv')
+search_querylist(MY_SESSION, 'queries.csv', bagify=False)
 
 logging.info("done\n\n")
