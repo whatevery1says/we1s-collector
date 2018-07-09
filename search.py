@@ -116,10 +116,7 @@ logging.basicConfig(datefmt='%m/%d/%Y %I:%M:%S %p',
                     level=logging.INFO)
 
 MY_SESSION = get_authenticated_session()
-TEST_QUERY_ROW = {'source_title': 'Chicago Daily Herald', 'source_id': 163823,
-                  'keyword_string': 'liberal arts',
-                  'begin_date': '2017-01-01', 'end_date': '2017-02-01'
-                 }
 
-search_query(MY_SESSION, 0, TEST_QUERY_ROW, bagify=True)
+search_querylist(MY_SESSION, 'queries.csv')
+
 logging.info("done\n\n")
