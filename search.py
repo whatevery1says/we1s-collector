@@ -76,6 +76,38 @@ def search_query(session, query_idx, qrow, bagify=True):
                 logging.info(name, 'JSON write failed', error)
 
 
+def search_querylist(session, fname='queries.csv'):
+    """For a list of queries in csv format:
+
+        source_title,source_id,keyword_string,begin_date,end_date
+        Chicago Daily Herald,163823,liberal arts,2017-01-01,2017-02-01
+
+    Output will be saved to queries.json and per-article json files.
+    The JSON format for an article is:
+
+        {
+          "name": "guardian-article1",
+          "namespace": "we1sv2.0",
+          "metapath": "Corpus,guardian-h,RawData",
+          "title": "Research funding: are we in danger of concentrating too hard?",
+          "content": "A growing obsession with funding scale risks crowding
+        out institutions and stifling innovation..."
+        }
+    """
+    with open(fname, 'r') as csvfile:
+        querylist = csv.DictReader(csvfile, delimiter=',')
+        for query_idx, row in enumerate(querylist):
+            search_query(session=session,
+                         query_idx=query_idx,
+                         qrow={'source_title':row['source_title'],
+                               'source_id':row['source_id'],
+                               'keyword_string':row['keyword_string'],
+                               'begin_date':row['begin_date'],
+                               'end_date':row['end_date']
+                              }
+                        )
+
+
 HANDLERS = [logging.FileHandler(filename='wsk.log', mode='a', delay=True),
             logging.StreamHandler()]
 logging.basicConfig(datefmt='%m/%d/%Y %I:%M:%S %p',
