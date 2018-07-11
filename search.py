@@ -5,6 +5,7 @@ import csv
 import json
 import logging
 import pprint
+import zipfile
 
 from bs4 import BeautifulSoup
 from wsk import WSK
@@ -25,7 +26,7 @@ def get_authenticated_session():
     return session
 
 
-def search_query(session, query_idx, qrow, bagify=True):
+def search_query(session, query_idx, qrow, bagify=True, zip=False):
     """Uses a session and a query row (labeled with an arbitrary index number)
     to retrieve an article collection and cache their word lists in JSON format.
     The qrow format is a dict with keys:
@@ -48,6 +49,8 @@ def search_query(session, query_idx, qrow, bagify=True):
                            yield_results=True
                           )
     query_result = list(query)
+    article_filename_list = []
+    # open zipfile here
     for group_idx, group in enumerate(query_result):
         for article_idx, article in enumerate(group):
             name = slug  + '_' + str(query_idx) + '_' + str(group_idx) + '_' + str(article_idx)
@@ -70,13 +73,17 @@ def search_query(session, query_idx, qrow, bagify=True):
                 logging.info(name, 'add keys failed', error)
             logging.debug(pprint.pformat(article))
             try:
-                with open(str(qrow['source_id']) + '_' + name + '.json', 'w') as outfile:
+                article_filename = str(qrow['source_id']) + '_' + name + '.json'
+                with open(article_filename, 'w') as outfile:
                     json.dump(article, outfile, indent=2)
+                article_filename_list.append(article_filename)
+                # write to zipfile here -- possibly instead of .json -- flag?
             except (OSError, TypeError) as error:
                 logging.info(name, 'JSON write failed', error)
+    
 
 
-def search_querylist(session, fname='queries.csv', bagify=True):
+def search_querylist(session, fname='queries.csv', bagify=True, zip=False):
     """For a list of queries in csv format:
 
         source_title,source_id,keyword_string,begin_date,end_date
@@ -118,6 +125,6 @@ logging.basicConfig(datefmt='%m/%d/%Y %I:%M:%S %p',
 
 MY_SESSION = get_authenticated_session()
 
-search_querylist(MY_SESSION, 'queries.csv', bagify=False)
+search_querylist(MY_SESSION, 'queries_team8.csv', bagify=False, zip=False)
 
 logging.info("done\n\n")
