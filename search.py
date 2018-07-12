@@ -62,7 +62,11 @@ def search_query(session, query_idx, qrow, bagify=True, zip_output=False):
             except KeyError as error:
                 logging.info(name, 'move headline to title failed', error)
             try:  # move dictionary keys
-                txt = BeautifulSoup(article.pop('full_text'), 'lxml').get_text()
+                soup = BeautifulSoup(article.pop('full_text'), 'lxml')
+                body_divs = soup.find_all("div", {"class":"BODY"})
+                txt = ''
+                for b in body_divs:
+                    txt = txt + b.get_text(separator=u' ')
                 if bagify:
                     txt = ' '.join(sorted(txt.split(' '), key=str.lower))
                 article['content'] = txt
