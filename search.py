@@ -5,6 +5,7 @@ import csv
 import json
 import logging
 import pprint
+import re
 import zipfile
 
 from bs4 import BeautifulSoup
@@ -54,6 +55,10 @@ def search_query(session, query_idx, qrow, bagify=True, zip_output=False):
     if zip_output:
         zip_path_out = slug_full + '.zip'
         zip_out = zipfile.ZipFile(zip_path_out, 'w', zipfile.ZIP_DEFLATED)
+        zip_out.writestr('README_' + slug_full, ' ')
+        zip_path_out_no_exact = slug_full + '(no-exact-match).zip'
+        zip_out_no_exact = zipfile.ZipFile(zip_path_out_no_exact, 'w', zipfile.ZIP_DEFLATED)
+        zip_out_no_exact.writestr('README_' + slug_full + '(no-exact-match)', ' ')
 
     for group_idx, group in enumerate(query_result):
         for article_idx, article in enumerate(group):
@@ -81,9 +86,14 @@ def search_query(session, query_idx, qrow, bagify=True, zip_output=False):
                 logging.info(name, 'add keys failed', error)
             logging.debug(pprint.pformat(article))
             try:
-                article_filename = str(qrow['source_id']) + '_' + name + '.json'
+                if re.search(qrow['keyword_string'], article['content'], re.IGNORECASE):
+                    zip_map = zip_out
+                    article_filename = str(qrow['source_id']) + '_' + name + '.json'
+                else:
+                    zip_map = zip_out_no_exact
+                    article_filename = str(qrow['source_id']) + '_' + name + '(no-exact-match).json'
                 if zip_output:
-                    zip_out.writestr(article_filename, json.dumps(article, indent=2))
+                    zip_map.writestr(article_filename, json.dumps(article, indent=2))
                 else:
                     with open(article_filename, 'w') as outfile:
                         json.dump(article, outfile, indent=2)
@@ -92,6 +102,7 @@ def search_query(session, query_idx, qrow, bagify=True, zip_output=False):
                 logging.info(name, 'JSON write failed', error)
     if zip_output:
         zip_out.close()
+        zip_out_no_exact.close()
 
 
 def search_querylist(session, fname='queries.csv', bagify=True, zip_output=False):
