@@ -26,7 +26,7 @@ def get_authenticated_session():
     return session
 
 
-def search_query(session, query_idx, qrow, bagify=True, zip=False):
+def search_query(session, query_idx, qrow, bagify=True, zip_output=False):
     """Uses a session and a query row (labeled with an arbitrary index number)
     to retrieve an article collection and cache their word lists in JSON format.
     The qrow format is a dict with keys:
@@ -50,7 +50,10 @@ def search_query(session, query_idx, qrow, bagify=True, zip=False):
                           )
     query_result = list(query)
     article_filename_list = []
-    # open zipfile here
+    if zip_output:
+        zip_path_out = qrow['source_id'] + '_' + slug + '.zip'
+        zip_out = zipfile.ZipFile(zip_path_out, 'w', zipfile.ZIP_DEFLATED)
+
     for group_idx, group in enumerate(query_result):
         for article_idx, article in enumerate(group):
             name = slug  + '_' + str(query_idx) + '_' + str(group_idx) + '_' + str(article_idx)
@@ -74,16 +77,19 @@ def search_query(session, query_idx, qrow, bagify=True, zip=False):
             logging.debug(pprint.pformat(article))
             try:
                 article_filename = str(qrow['source_id']) + '_' + name + '.json'
-                with open(article_filename, 'w') as outfile:
-                    json.dump(article, outfile, indent=2)
-                article_filename_list.append(article_filename)
-                # write to zipfile here -- possibly instead of .json -- flag?
+                if zip_output:
+                    zip_out.writestr(article_filename, json.dumps(article, indent=2))
+                else:
+                    with open(article_filename, 'w') as outfile:
+                        json.dump(article, outfile, indent=2)
+                    article_filename_list.append(article_filename)
             except (OSError, TypeError) as error:
                 logging.info(name, 'JSON write failed', error)
-    
+    if zip_output:
+        zip_out.close()
 
 
-def search_querylist(session, fname='queries.csv', bagify=True, zip=False):
+def search_querylist(session, fname='queries.csv', bagify=True, zip_output=False):
     """For a list of queries in csv format:
 
         source_title,source_id,keyword_string,begin_date,end_date
@@ -112,7 +118,8 @@ def search_querylist(session, fname='queries.csv', bagify=True, zip=False):
                                'begin_date':row['begin_date'],
                                'end_date':row['end_date']
                               },
-                         bagify=bagify
+                         bagify=bagify,
+                         zip_output=zip_output
                         )
 
 
@@ -125,6 +132,6 @@ logging.basicConfig(datefmt='%m/%d/%Y %I:%M:%S %p',
 
 MY_SESSION = get_authenticated_session()
 
-search_querylist(MY_SESSION, 'queries_team8.csv', bagify=False, zip=False)
+search_querylist(MY_SESSION, 'queries_small.csv', bagify=False, zip_output=True)
 
 logging.info("done\n\n")
