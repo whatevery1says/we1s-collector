@@ -565,7 +565,7 @@ class WSK:
               <documentId>{1}</documentId>
             </documentIdList>
             <retrievalOptions>
-              <documentView>FullTextWithTerms</documentView>
+              <documentView>FullText</documentView>
               <documentMarkup>Display</documentMarkup>
             </retrievalOptions>
           </GetDocumentsByDocumentId>
