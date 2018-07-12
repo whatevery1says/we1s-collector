@@ -39,6 +39,7 @@ def search_query(session, query_idx, qrow, bagify=True, zip_output=False):
     """
     slug = ''.join(c for c in qrow['source_title'] if c.isalnum()).lower() + '_' + \
            ''.join(c for c in qrow['keyword_string'] if c.isalnum()).lower()
+    slug_full = qrow['source_id'] + '_' + slug + '_' + qrow['begin_date'] + '_' + qrow['end_date']
     logging.info(slug)
     query = session.search(query=qrow['keyword_string'],
                            source_id=qrow['source_id'],
@@ -51,12 +52,12 @@ def search_query(session, query_idx, qrow, bagify=True, zip_output=False):
     query_result = list(query)
     article_filename_list = []
     if zip_output:
-        zip_path_out = qrow['source_id'] + '_' + slug + '.zip'
+        zip_path_out = slug_full + '.zip'
         zip_out = zipfile.ZipFile(zip_path_out, 'w', zipfile.ZIP_DEFLATED)
 
     for group_idx, group in enumerate(query_result):
         for article_idx, article in enumerate(group):
-            name = slug  + '_' + str(query_idx) + '_' + str(group_idx) + '_' + str(article_idx)
+            name = slug_full  + '_' + str(query_idx) + '_' + str(group_idx) + '_' + str(article_idx)
             try:  # move dictionary keys
                 article['title'] = article.pop('headline', "untitled")
             except KeyError as error:
@@ -75,7 +76,7 @@ def search_query(session, query_idx, qrow, bagify=True, zip_output=False):
             try:  # add dictionary keys
                 article['name'] = name
                 article['namespace'] = "we1sv2.0"
-                article['metapath'] = "Corpus," + slug + ",RawData"
+                article['metapath'] = "Corpus," + slug_full + ",RawData"
             except (KeyError, TypeError) as error:
                 logging.info(name, 'add keys failed', error)
             logging.debug(pprint.pformat(article))
