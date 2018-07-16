@@ -148,6 +148,6 @@ logging.basicConfig(datefmt='%m/%d/%Y %I:%M:%S %p',
 
 MY_SESSION = get_authenticated_session()
 
-search_querylist(MY_SESSION, 'queries_small.csv', bagify=False, zip_output=True)
+search_querylist(MY_SESSION, 'queries.csv', bagify=False, zip_output=True)
 
 logging.info("done\n\n")
