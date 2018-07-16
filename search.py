@@ -6,10 +6,13 @@ import json
 import logging
 import pprint
 import re
+import string
 import zipfile
 
 from bs4 import BeautifulSoup
+import unidecode
 from wsk import WSK
+
 import config.config as cfg
 
 
@@ -25,6 +28,15 @@ def get_authenticated_session():
     session.authenticate(username=cfg.ln_username,
                          password=cfg.ln_password)
     return session
+
+
+def string_cleaner(unistr):
+    """Returns string in unaccented form, printable characters only,
+    with sequential whitespace collapsed to single spaces.
+    """
+    unaccented = unidecode.unidecode(unistr)
+    printonly = ''.join(filter(lambda x: x in string.printable, unaccented))
+    return ' '.join(printonly.split())
 
 
 def search_query(session, query_idx, qrow, bagify=True, zip_output=False):
@@ -73,6 +85,7 @@ def search_query(session, query_idx, qrow, bagify=True, zip_output=False):
                 txt = ''
                 for b in body_divs:
                     txt = txt + b.get_text(separator=u' ')
+                txt = string_cleaner(txt)
                 if bagify:
                     txt = ' '.join(sorted(txt.split(' '), key=str.lower))
                 article['content'] = txt
