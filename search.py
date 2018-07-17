@@ -2,6 +2,7 @@
 """
 
 import csv
+import datetime
 import json
 import logging
 import os
@@ -15,6 +16,15 @@ import unidecode
 from wsk import WSK
 
 import config.config as cfg
+
+
+def date_validate(date_text, format_string='%Y-%m-%d'):
+    """Validate a date string as YYYY-MM-DD format"""
+    try:
+        datetime.datetime.strptime(date_text, format_string)
+    except ValueError:
+        raise ValueError("Incorrect data format, should be YYYY-MM-DD")
+    return valid_date
 
 
 def get_authenticated_session():
