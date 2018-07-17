@@ -39,7 +39,7 @@ def string_cleaner(unistr):
     return ' '.join(printonly.split())
 
 
-def search_query(session, query_idx, qrow, bagify=True, zip_output=False):
+def search_query(session, query_idx, qrow, result_filter='', bagify=True, zip_output=False):
     """Uses a session and a query row (labeled with an arbitrary index number)
     to retrieve an article collection and cache their word lists in JSON format.
     The qrow format is a dict with keys:
@@ -68,9 +68,10 @@ def search_query(session, query_idx, qrow, bagify=True, zip_output=False):
         zip_path_out = slug_full + '.zip'
         zip_out = zipfile.ZipFile(zip_path_out, 'w', zipfile.ZIP_DEFLATED)
         zip_out.writestr('README_' + slug_full, ' ')
-        zip_path_out_no_exact = slug_full + '(no-exact-match).zip'
-        zip_out_no_exact = zipfile.ZipFile(zip_path_out_no_exact, 'w', zipfile.ZIP_DEFLATED)
-        zip_out_no_exact.writestr('README_' + slug_full + '(no-exact-match)', ' ')
+        if result_filter:
+            zip_path_out_no_exact = slug_full + '(no-exact-match).zip'
+            zip_out_no_exact = zipfile.ZipFile(zip_path_out_no_exact, 'w', zipfile.ZIP_DEFLATED)
+            zip_out_no_exact.writestr('README_' + slug_full + '(no-exact-match)', ' ')
 
     for group_idx, group in enumerate(query_result):
         for article_idx, article in enumerate(group):
@@ -99,12 +100,14 @@ def search_query(session, query_idx, qrow, bagify=True, zip_output=False):
                 logging.info(name, 'add keys failed', error)
             logging.debug(pprint.pformat(article))
             try:
-                if re.search(qrow['keyword_string'], article['content'], re.IGNORECASE):
-                    zip_map = zip_out
-                    article_filename = str(qrow['source_id']) + '_' + name + '.json'
-                else:
+                if result_filter and not re.search(result_filter,
+                                               article['content'], re.IGNORECASE):
                     zip_map = zip_out_no_exact
                     article_filename = str(qrow['source_id']) + '_' + name + '(no-exact-match).json'
+                else:
+                    zip_map = zip_out
+                    article_filename = str(qrow['source_id']) + '_' + name + '.json'
+
                 if zip_output:
                     zip_map.writestr(article_filename, json.dumps(article, indent=2))
                 else:
@@ -147,6 +150,7 @@ def search_querylist(session, fname='queries.csv', bagify=True, zip_output=False
                                'begin_date':row['begin_date'],
                                'end_date':row['end_date']
                               },
+                         result_filter=row['result_filter'],
                          bagify=bagify,
                          zip_output=zip_output
                         )
