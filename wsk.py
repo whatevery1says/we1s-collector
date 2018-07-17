@@ -308,7 +308,8 @@ class WSK:
     end_date='2017-12-02',
     return_results=False,
     save_results=True,
-    yield_results=False):
+    yield_results=False,
+    time_delta=30):
     '''
     Run a full query for the user, fetching all doc metadata and content
 
@@ -320,11 +321,11 @@ class WSK:
     @param: {bool} return_results: return matches to the parent function
     @param: {bool} store_results: save matches to mongo
     @param: {bool} get_text: fetch full text content for each match
+    @param: {bool} time_delta: time stride in days
     @returns: {obj} an object with metadata describing search results data
     '''
     user_results = []  # results to return to user
     per_page = 10      # results per page
-    time_delta = 5     # time stride in days
     start_date, end_date = self.get_search_dates(start_date, end_date)
     query_start_date = start_date
     query_end_date = start_date + timedelta(days=time_delta)
