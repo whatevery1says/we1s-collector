@@ -118,7 +118,8 @@ def search_query(session, query_idx, qrow, result_filter='', bagify=True, zip_ou
                 logging.info(name, 'JSON write failed', error)
     if zip_output:
         zip_out.close()
-        zip_out_no_exact.close()
+        if result_filter:
+            zip_out_no_exact.close()
 
 
 def search_querylist(session, fname='queries.csv', bagify=True, zip_output=False):
