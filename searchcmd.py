@@ -31,6 +31,5 @@ if __name__ == '__main__':
     if len(sys.argv[1:])==0:
         PARSER.print_help()
         PARSER.exit()
-    print("!\n\n")
     ARGS = PARSER.parse_args()
     main(ARGS)
