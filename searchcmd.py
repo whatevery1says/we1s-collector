@@ -6,6 +6,7 @@ usage examples:
 """
 
 import argparse
+import sys
 
 from search import get_authenticated_session, search_querylist
 
@@ -27,5 +28,9 @@ if __name__ == '__main__':
     PARSER.add_argument('-o', '--outpath', default='', help='output path, e.g. "../output"')
     PARSER.add_argument('-q', '--queries', help='specify query file path, e.g. queries.csv')
     PARSER.add_argument('-z', '--zip', action='store_false', help='zip the json output')
+    if len(sys.argv[1:])==0:
+        PARSER.print_help()
+        PARSER.exit()
+    print("!\n\n")
     ARGS = PARSER.parse_args()
     main(ARGS)
