@@ -1,4 +1,4 @@
-source_title,source_id,keyword_string,begin_date,end_date
+source_title,source_id,keyword_string,begin_date,end_date,result_filter
 Chicago Daily Herald,163823,liberal arts,2017-01-01,2017-02-01
 Chicago Daily Herald,163823,plural (humanity),2017-01-01,2017-02-01
 Los Angeles Times,8006,liberal arts,2017-01-01,2017-02-01
