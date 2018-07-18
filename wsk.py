@@ -1,6 +1,7 @@
 from pymongo import MongoClient
 from bs4 import BeautifulSoup, element
 from datetime import datetime, timedelta
+from dateutil import parser as dateparser
 from random import random
 import base64
 import calendar
@@ -664,12 +665,24 @@ class Document(dict):
 
   def get_doc_pub_date(self, soup):
     '''
+    Parses different human-readable date formats dynamically,
+    e.g.:
+        January 3, 2017 Tuesday 5:00 PM GMT
+    and returns a date in UTC+Z format using the format,
+    e.g.:
+        2017-01-03T17:00:00Z
     @param {BeautifulSoup} soup: a documentcontainer tag
     @returns {str}: the pub date attribute from a document
     '''
     try:
-      date = soup.find('div', {'class': 'PUB-DATE'}).find('span').string
-      return date if date else ''
+      bad_date = '1900-01-01T00:00:00Z'
+      date_str = soup.find('div', {'class': 'PUB-DATE'}).get_text()
+      date = dateparser.parse(date_str)
+      date_out = date.strftime('%Y-%m-%dT%H:%M:%SZ')
+      if not date_out:
+          date_out = bad_date
+      print(date_out)
+      return date_out
     except Exception as exc:
       if self.verbose: print(' ! error parsing doc_pub_date', exc)
       return ''
