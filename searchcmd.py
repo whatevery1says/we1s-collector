@@ -1,4 +1,13 @@
+#!/usr/bin/env python3
 """WSK command line interface for WE1S (WhatEvery1Says)
+
+Example usage:
+
+    python searchcmd.py -o ../wskoutput -q queries.csv 
+
+OR
+
+    ./searchcmd.py -o ../wskoutput -q queries.csv 
 """
 
 import argparse
@@ -11,14 +20,14 @@ def main(args):
     session = get_authenticated_session()
 
     if args.queries:
-        search_querylist(session, fname='queries.csv', bagify=args.bagify,
-                         outpath=args.outpath, zip_output=args.bagify)
+        search_querylist(session, fname=args.queries, bagify=args.bagify,
+                         outpath=args.outpath, zip_output=args.zip)
 
 
 if __name__ == '__main__':
     PARSER = argparse.ArgumentParser(description=__doc__)
     PARSER.add_argument('-b', '--bagify', action='store_true', help='')
-    PARSER.add_argument('-o', '--outpath', help='output path, e.g. "../output"')
+    PARSER.add_argument('-o', '--outpath', default='', help='output path, e.g. "../output"')
     PARSER.add_argument('-q', '--queries', help='specify query file path, e.g. queries.csv')
     PARSER.add_argument('-z', '--zip', action='store_false', help='zip the json output')
     ARGS = PARSER.parse_args()
