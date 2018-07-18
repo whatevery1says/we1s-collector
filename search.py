@@ -104,19 +104,26 @@ def search_query(session, query_idx, qrow, bagify=True, result_filter='',
             try:
                 if result_filter and not re.search(result_filter,
                                                    article['content'], re.IGNORECASE):
-                    zip_map = zip_out_no_exact
                     article_filename = str(qrow['source_id']) + '_' + name + '(no-exact-match).json'
+                    if zip_output:
+                        zip_map = zip_out_no_exact
+                        zip_map.writestr(article_filename, json.dumps(article, indent=2))
+                    else:
+                        article_filepath = os.path.join(outpath, article_filename)
+                        with open(article_filepath, 'w') as outfile:
+                            json.dump(article, outfile, indent=2)
+                        article_filename_list.append(article_filename)
                 else:
-                    zip_map = zip_out
                     article_filename = str(qrow['source_id']) + '_' + name + '.json'
+                    if zip_output:
+                        zip_map = zip_out
+                        zip_map.writestr(article_filename, json.dumps(article, indent=2))
+                    else:
+                        article_filepath = os.path.join(outpath, article_filename)
+                        with open(article_filepath, 'w') as outfile:
+                            json.dump(article, outfile, indent=2)
+                        article_filename_list.append(article_filename)
 
-                if zip_output:
-                    zip_map.writestr(article_filename, json.dumps(article, indent=2))
-                else:
-                    article_filepath = os.path.join(outpath, article_filename)
-                    with open(article_filepath, 'w') as outfile:
-                        json.dump(article, outfile, indent=2)
-                    article_filename_list.append(article_filename)
             except (OSError, TypeError) as error:
                 logging.info(name, 'JSON write failed', error)
     if zip_output:
