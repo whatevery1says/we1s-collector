@@ -650,14 +650,19 @@ class Document(dict):
       return ''
 
 
-  def get_doc_pub(self, soup):
+  def get_doc_pub(self, soup, default_name='No pub name'):
     '''
     @param {BeautifulSoup} soup: a documentcontainer tag
     @returns {str}: the publication attribute of a document
     '''
     try:
+      pub = soup.find('meta', {'name': 'sourceName'})['content']
+      if pub:
+        return pub
       pub = soup.find('div', {'class': 'PUB'}).string
-      return pub if pub else ''
+      if pub:
+        return pub
+      return default_name
     except Exception as exc:
       if self.verbose: print(' ! error parsing doc_pub', exc)
       return ''
