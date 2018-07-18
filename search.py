@@ -163,6 +163,9 @@ def search_querylist(session, fname='queries.csv', bagify=True, outpath='', zip_
     with open(fname, 'r') as csvfile:
         querylist = csv.DictReader(csvfile, delimiter=',')
         for query_idx, row in enumerate(querylist):
+            if not date_validate(row['begin_date']) or not date_validate(row['end_date']):
+                logging.info('Invalid date fields in range:', row['begin_date'], row['end_date'])
+                logging.info('  ...skipping:', query_idx, row)
             search_query(session=session,
                          query_idx=query_idx,
                          qrow={'source_title':row['source_title'],
