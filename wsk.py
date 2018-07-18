@@ -695,6 +695,7 @@ class Document(dict):
     '''
     try:
       length = soup.find('div', {'class': 'LENGTH'}).string
+      length = length.replace(' words', '')
       return length if length else ''
     except Exception as exc:
       if self.verbose: print(' ! error parsing doc_length', exc)
