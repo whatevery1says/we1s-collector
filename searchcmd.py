@@ -1,12 +1,7 @@
 #!/usr/bin/env python3
 """WSK command line interface for WE1S (WhatEvery1Says)
-
-Example usage:
-
+usage examples:
     python searchcmd.py -o ../wskoutput -q queries.csv 
-
-OR
-
     ./searchcmd.py -o ../wskoutput -q queries.csv 
 """
 
@@ -25,7 +20,9 @@ def main(args):
 
 
 if __name__ == '__main__':
-    PARSER = argparse.ArgumentParser(description=__doc__)
+    PARSER = argparse.ArgumentParser(description=__doc__,
+                                     usage='use "%(prog)s --help" for more information',
+                                     formatter_class=argparse.RawTextHelpFormatter)
     PARSER.add_argument('-b', '--bagify', action='store_true', help='')
     PARSER.add_argument('-o', '--outpath', default='', help='output path, e.g. "../output"')
     PARSER.add_argument('-q', '--queries', help='specify query file path, e.g. queries.csv')
