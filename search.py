@@ -4,6 +4,7 @@
 import csv
 import json
 import logging
+import os
 import pprint
 import re
 import string
@@ -39,7 +40,8 @@ def string_cleaner(unistr):
     return ' '.join(printonly.split())
 
 
-def search_query(session, query_idx, qrow, result_filter='', bagify=True, zip_output=False):
+def search_query(session, query_idx, qrow, bagify=True, result_filter='',
+                 outpath='', zip_output=False):
     """Uses a session and a query row (labeled with an arbitrary index number)
     to retrieve an article collection and cache their word lists in JSON format.
     The qrow format is a dict with keys:
@@ -65,11 +67,11 @@ def search_query(session, query_idx, qrow, result_filter='', bagify=True, zip_ou
     query_result = list(query)
     article_filename_list = []
     if zip_output:
-        zip_path_out = slug_full + '.zip'
+        zip_path_out = os.path.join(outpath, slug_full + '.zip')
         zip_out = zipfile.ZipFile(zip_path_out, 'w', zipfile.ZIP_DEFLATED)
         zip_out.writestr('README_' + slug_full, ' ')
         if result_filter:
-            zip_path_out_no_exact = slug_full + '(no-exact-match).zip'
+            zip_path_out_no_exact = os.path.join(outpath, slug_full + '(no-exact-match).zip')
             zip_out_no_exact = zipfile.ZipFile(zip_path_out_no_exact, 'w', zipfile.ZIP_DEFLATED)
             zip_out_no_exact.writestr('README_' + slug_full + '(no-exact-match)', ' ')
 
@@ -101,7 +103,7 @@ def search_query(session, query_idx, qrow, result_filter='', bagify=True, zip_ou
             logging.debug(pprint.pformat(article))
             try:
                 if result_filter and not re.search(result_filter,
-                                               article['content'], re.IGNORECASE):
+                                                   article['content'], re.IGNORECASE):
                     zip_map = zip_out_no_exact
                     article_filename = str(qrow['source_id']) + '_' + name + '(no-exact-match).json'
                 else:
@@ -111,7 +113,8 @@ def search_query(session, query_idx, qrow, result_filter='', bagify=True, zip_ou
                 if zip_output:
                     zip_map.writestr(article_filename, json.dumps(article, indent=2))
                 else:
-                    with open(article_filename, 'w') as outfile:
+                    article_filepath = os.path.join(outpath, article_filename)
+                    with open(article_filepath, 'w') as outfile:
                         json.dump(article, outfile, indent=2)
                     article_filename_list.append(article_filename)
             except (OSError, TypeError) as error:
@@ -122,7 +125,7 @@ def search_query(session, query_idx, qrow, result_filter='', bagify=True, zip_ou
             zip_out_no_exact.close()
 
 
-def search_querylist(session, fname='queries.csv', bagify=True, zip_output=False):
+def search_querylist(session, fname='queries.csv', bagify=True, outpath='', zip_output=False):
     """For a list of queries in csv format:
 
         source_title,source_id,keyword_string,begin_date,end_date
@@ -153,6 +156,7 @@ def search_querylist(session, fname='queries.csv', bagify=True, zip_output=False
                               },
                          result_filter=row['result_filter'],
                          bagify=bagify,
+                         outpath=outpath,
                          zip_output=zip_output
                         )
 
