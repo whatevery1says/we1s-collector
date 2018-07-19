@@ -21,9 +21,9 @@ import config.config as cfg
 def date_validate(date_text, format_string='%Y-%m-%d'):
     """Validate a date string as YYYY-MM-DD format"""
     try:
-        datetime.datetime.strptime(date_text, format_string)
-    except ValueError:
-        raise ValueError("Incorrect data format, should be YYYY-MM-DD")
+        valid_date = datetime.datetime.strptime(date_text, format_string)
+    except ValueError as error:
+        return False
     return valid_date
 
 
@@ -163,22 +163,30 @@ def search_querylist(session, fname='queries.csv', bagify=True, outpath='', zip_
     with open(fname, 'r') as csvfile:
         querylist = csv.DictReader(csvfile, delimiter=',')
         for query_idx, row in enumerate(querylist):
-            if not date_validate(row['begin_date']) or not date_validate(row['end_date']):
-                logging.info('Invalid date fields in range:', row['begin_date'], row['end_date'])
-                logging.info('  ...skipping:', query_idx, row)
-            search_query(session=session,
-                         query_idx=query_idx,
-                         qrow={'source_title':row['source_title'],
-                               'source_id':row['source_id'],
-                               'keyword_string':row['keyword_string'],
-                               'begin_date':row['begin_date'],
-                               'end_date':row['end_date']
-                              },
-                         result_filter=row['result_filter'],
-                         bagify=bagify,
-                         outpath=outpath,
-                         zip_output=zip_output
-                        )
+            begin = date_validate(row['begin_date'], format_string='%Y-%m-%d')
+            end = date_validate(row['end_date'], format_string='%Y-%m-%d')
+            if not begin:
+                logging.info('Invalid date {0}; skipping query row: {1}'.format(row['begin_date'], query_idx))
+                continue
+            elif not end:
+                logging.info('Invalid date {0}; skipping query row: {1}'.format(row['end_date'], query_idx))
+                continue
+            elif begin > end:
+                logging.info('Begin date range after end: {0}, {1}; skipping query row: {2}'.format(row['begin_date'], row['end_date'], query_idx))
+            else:
+                search_query(session=session,
+                             query_idx=query_idx,
+                             qrow={'source_title':row['source_title'],
+                                   'source_id':row['source_id'],
+                                   'keyword_string':row['keyword_string'],
+                                   'begin_date':row['begin_date'],
+                                   'end_date':row['end_date']
+                                  },
+                             result_filter=row['result_filter'],
+                             bagify=bagify,
+                             outpath=outpath,
+                             zip_output=zip_output
+                            )
 
 
 HANDLERS = [logging.FileHandler(filename='wsk.log', mode='a', delay=True),
