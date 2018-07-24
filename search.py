@@ -75,6 +75,13 @@ def search_query(session, query_idx, qrow, bagify=True, result_filter='',
                            yield_results=True
                           )
     query_result = list(query)
+    query_result_isempty = True
+    for q in query_result:
+        if q:
+            query_result_isempty = False
+    if query_result_isempty:
+        logging.info('*** search aborted: {0}'.format(slug_full))
+        return
     article_filename_list = []
     if zip_output:
         zip_path_out = os.path.join(outpath, slug_full + '.zip')
