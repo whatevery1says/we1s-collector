@@ -34,10 +34,10 @@ def get_authenticated_session():
     and uses it as needed.
     """
     # initialize a WSK session, specifying email as project identifier
-    session = WSK(environment=cfg.ln_environment, project_id=cfg.ln_project_id)
+    session = WSK(environment=cfg.LN_ENVIRONMENT, project_id=cfg.LN_PROJECT_ID)
     # authenticate with the web service
-    session.authenticate(username=cfg.ln_username,
-                         password=cfg.ln_password)
+    session.authenticate(username=cfg.LN_USERNAME,
+                         password=cfg.LN_PASSWORD)
     return session
 
 
