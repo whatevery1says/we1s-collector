@@ -5,3 +5,5 @@ RUN pip install --no-cache-dir lxml
 RUN pip install -r /app/requirements.txt
 
 COPY . /app
+
+ENTRYPOINT ["cat"]
