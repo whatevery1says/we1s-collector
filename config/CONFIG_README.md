@@ -11,6 +11,7 @@ ordered from least to greatest complexity.
 
 ## Standalone
 
+
 ### Standalone with custom file
 
 To run as a standalone program, customize the `my_` variables in config.py
@@ -30,6 +31,7 @@ In the shell, define these environment variables:
 
 
 ## Docker
+
 
 ### Docker with environment variables
 
@@ -77,6 +79,7 @@ Once secrets are created, either:
 1. launch a  docker service with access to those secrets, or
 2. deploy a swarm stack that defines access to those secrets.
 
+
 #### Option 1. `docker service` with secrets
 
 Then launch as a service that uses those secrets:
@@ -89,6 +92,16 @@ Then launch as a service that uses those secrets:
         --secret ln_password \
         --publish published=8081,target=8081 \
         jeremydouglass/we1s-collector:latest
+
+...or add them to a running service:
+
+    docker service update \
+        --secret ln_environment \
+        --secret ln_project_id \
+        --secret ln_username \
+        --secret ln_password \
+        we1s-collector
+
 
 #### Option 2. `docker stack deploy` with secrets
 
