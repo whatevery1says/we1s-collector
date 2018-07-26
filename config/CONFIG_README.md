@@ -127,8 +127,6 @@ and launch with `docker stack deploy`.
       ln_password:
         external: true
 
-        file: ./ln_password.txt
-
 Instead of loading secrets that were created beforehand, you can also load
 create them directly from the filesystem where docker-compose is run:
 
