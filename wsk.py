@@ -631,7 +631,12 @@ class Document(dict):
     '''
     try:
       headline = soup.find('div', {'class': 'HEADLINE'}).string
-      return headline if headline else ''
+      if headline:
+      	return headline
+      headline = soup.find('h1').string
+      if headline:
+          return headline
+      return ''
     except Exception as exc:
       if self.verbose: print(' ! error parsing headline', exc)
       return ''
