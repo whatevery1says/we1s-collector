@@ -4,6 +4,8 @@ COPY requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir lxml
 RUN pip install -r /app/requirements.txt
 
-COPY . /app
+RUN useradd -u 1000 -g users -m -s /bin/sh jovyan
 
-ENTRYPOINT ["cat"]
+COPY --chown=jovyan:users . /app
+
+ENTRYPOINT ["tail", "-f", "/dev/null"]
