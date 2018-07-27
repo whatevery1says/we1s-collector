@@ -199,7 +199,9 @@ def search_querylist(session, fname='queries.csv', bagify=True, outpath='', zip_
                             )
 
 
-HANDLERS = [logging.FileHandler(filename='wsk.log', mode='a', delay=True),
+STARTTIME = datetime.datetime.now().strftime('%Y%m%d-%H%m%S')
+HANDLERS = [logging.FileHandler(filename='wsk-' + STARTTIME + '.log',
+                                mode='a', delay=True),
             logging.StreamHandler()]
 logging.basicConfig(datefmt='%m/%d/%Y %I:%M:%S %p',
                     format='%(asctime)s %(message)s',
