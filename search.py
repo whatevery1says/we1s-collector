@@ -80,7 +80,7 @@ def search_query(session, query_idx, qrow, bagify=True, result_filter='',
         if qitem:
             query_result_isempty = False
     if query_result_isempty:
-        logging.info('*** search aborted: {0}'.format(slug_full))
+        logging.info('*** search aborted: %s', slug_full)
         return
     article_filename_list = []
     if zip_output:
@@ -173,13 +173,16 @@ def search_querylist(session, fname='queries.csv', bagify=True, outpath='', zip_
             begin = date_validate(row['begin_date'], format_string='%Y-%m-%d')
             end = date_validate(row['end_date'], format_string='%Y-%m-%d')
             if not begin:
-                logging.info('Invalid date {0}; skipping query row: {1}'.format(row['begin_date'], query_idx))
+                logging.info('Invalid date %s; skip query row: %s',
+                             row['begin_date'], query_idx)
                 continue
             elif not end:
-                logging.info('Invalid date {0}; skipping query row: {1}'.format(row['end_date'], query_idx))
+                logging.info('Invalid date %s; skip query row: %s',
+                             row['end'], query_idx)
                 continue
             elif begin > end:
-                logging.info('Begin date range after end: {0}, {1}; skipping query row: {2}'.format(row['begin_date'], row['end_date'], query_idx))
+                logging.info('Begin date after end: %s, %s; skip query row: %s',
+                             row['begin_date'], row['end_date'], query_idx)
             else:
                 search_query(session=session,
                              query_idx=query_idx,
