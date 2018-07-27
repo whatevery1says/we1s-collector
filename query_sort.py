@@ -2,10 +2,13 @@
 """
 
 def find(substr, infile, outfile):
-  with open(infile) as a, open(outfile, 'w') as b:
-   for line in a:
-    if substr in line:
-     b.write(line)
- 
+    """copy any lines with matching string from infile to outfile"""
+    with open(infile) as fin, open(outfile, 'w') as fout:
+        for line in fin:
+            if substr in line:
+                fout.write(line)
+
 # Example usage:
-find('the arts', 'queries_7.20.18_rows2-401_all.csv', 'queries_7.20.18_rows2-401_arts.csv')
+find('the arts',
+     'queries_7.20.18_rows2-401_all.csv',
+     'queries_7.20.18_rows2-401_arts.csv')
