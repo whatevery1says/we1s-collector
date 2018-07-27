@@ -22,7 +22,7 @@ def date_validate(date_text, format_string='%Y-%m-%d'):
     """Validate a date string as YYYY-MM-DD format"""
     try:
         valid_date = datetime.datetime.strptime(date_text, format_string)
-    except ValueError as error:
+    except ValueError:
         return False
     return valid_date
 
@@ -76,8 +76,8 @@ def search_query(session, query_idx, qrow, bagify=True, result_filter='',
                           )
     query_result = list(query)
     query_result_isempty = True
-    for q in query_result:
-        if q:
+    for qitem in query_result:
+        if qitem:
             query_result_isempty = False
     if query_result_isempty:
         logging.info('*** search aborted: {0}'.format(slug_full))
@@ -103,8 +103,8 @@ def search_query(session, query_idx, qrow, bagify=True, result_filter='',
                 soup = BeautifulSoup(article.pop('full_text'), 'lxml')
                 body_divs = soup.find_all("div", {"class":"BODY"})
                 txt = ''
-                for b in body_divs:
-                    txt = txt + b.get_text(separator=u' ')
+                for body_div in body_divs:
+                    txt = txt + body_div.get_text(separator=u' ')
                 txt = string_cleaner(txt)
                 if bagify:
                     txt = ' '.join(sorted(txt.split(' '), key=str.lower))
