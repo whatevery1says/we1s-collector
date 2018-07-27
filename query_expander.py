@@ -3,7 +3,6 @@
 """
 import csv
 import pprint
-import string
 
 
 def expand_querylist(fname='queries.csv', fout='queries-expanded.csv'):
@@ -30,14 +29,7 @@ def expand_querylist(fname='queries.csv', fout='queries-expanded.csv'):
     with open(fname, 'r') as csvfile:
         querydict = csv.DictReader(csvfile, delimiter=',')
         queryrows.append(querydict.fieldnames)
-        for query_idx, row in enumerate(querydict):
-            qrow = {'source_title':row['source_title'],
-                    'source_id':row['source_id'],
-                    'keyword_string':row['keyword_string'],
-                    'begin_date':row['begin_date'],
-                    'end_date':row['end_date'],
-                    'result_filter':row['result_filter']
-                    }
+        for _, row in enumerate(querydict):
             if '...' in row['begin_date'] and not row['end_date']:
                 terms = [int(x) for x in row['begin_date'].split('...')]
                 for year in range(terms[0], terms[1]+1):
