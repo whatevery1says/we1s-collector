@@ -170,15 +170,15 @@ def search_querylist(session, fname='queries.csv', bagify=True, outpath='', zip_
     with open(fname, 'r') as csvfile:
         querylist = csv.DictReader(csvfile, delimiter=',')
         for query_idx, row in enumerate(querylist):
-            begin = date_validate(row['begin_date'], format_string='%Y-%m-%d')
-            end = date_validate(row['end_date'], format_string='%Y-%m-%d')
+            begin = date_validate(row['begin_date'].strip(), format_string='%Y-%m-%d')
+            end = date_validate(row['end_date'].strip(), format_string='%Y-%m-%d')
             if not begin:
                 logging.info('Invalid date %s; skip query row: %s',
                              row['begin_date'], query_idx)
                 continue
             elif not end:
                 logging.info('Invalid date %s; skip query row: %s',
-                             row['end'], query_idx)
+                             row['end_date'], query_idx)
                 continue
             elif begin > end:
                 logging.info('Begin date after end: %s, %s; skip query row: %s',
@@ -189,8 +189,8 @@ def search_querylist(session, fname='queries.csv', bagify=True, outpath='', zip_
                              qrow={'source_title':row['source_title'],
                                    'source_id':row['source_id'],
                                    'keyword_string':row['keyword_string'],
-                                   'begin_date':row['begin_date'],
-                                   'end_date':row['end_date']
+                                   'begin_date':row['begin_date'].strip(),
+                                   'end_date':row['end_date'].strip()
                                   },
                              result_filter=row['result_filter'],
                              bagify=bagify,
