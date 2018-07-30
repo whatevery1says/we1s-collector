@@ -8,12 +8,12 @@ Count all files inside zipfiles in the current tree:
 Count all files inside zipfiles in the tree of a subdirectory:
     ./zipcount.py myfolder
 
-Count all filenames matching the namefilter 'txt':
-    ./zipcount.py -f txt
+Count all filenames matching the namefilter 'json':
+    ./zipcount.py -f json
 
-Count all filenames matching the namefilter 'json' in a subdirectory tree:
+Count all filenames matching the namefilter 'txt' in a subdirectory tree:
 
-    ./zipcount.py myfolder -f json
+    ./zipcount.py myfolder -f txt
 """
 
 
