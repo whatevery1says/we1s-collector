@@ -14,11 +14,11 @@ def main(filespath, namefilter='.json'):
     """Loop through zip files..."""
 
     client = MongoClient('mongo', 27017)
-    db = client['we1s']
-    db_collection = db['Corpus'] # filespath
+    db_collection = client['we1s']['Corpus'] # filespath
 
     os.chdir(filespath)
     count = 0
+    errors = {}
     for (dirname, _dirs, files) in os.walk(filespath):
         for filename in files:
             if filename.endswith('.zip'):  # scan for zip files
@@ -26,18 +26,22 @@ def main(filespath, namefilter='.json'):
                 # print('\n', filepath, '\n')
                 source = zipfile.ZipFile(filepath, 'r')  # read zip
                 for afile in source.filelist:
-                    if namefilter:
-                        if namefilter in afile.filename:
-                            count += 1
-                            # print('   ', afile.filename)
-                            with source.open(afile) as f:
-                                file_data = json.loads(f.read().decode('utf-8'))
-                                db_collection.insert(file_data)
-                    else:
+                    if namefilter and namefilter in afile.filename:
                         count += 1
+                        # print('   ', afile.filename)
+                        with source.open(afile) as f_in_zip:
+                            try:
+                                file_data = json.loads(f_in_zip.read().decode('utf-8'))
+                                db_collection.insert(file_data)
+                            except json.decoder.JSONDecodeError:
+                                if 'JSONDecodeError' not in errors:
+                                    errors['JSONDecodeError'] = 1
+                                else:
+                                    errors['JSONDecodeError'] += 1
                         # print('   ', afile.filename)
         # print('   ' + str(count))
     client.close()
+    print(errors)
     print(count)
 
 
