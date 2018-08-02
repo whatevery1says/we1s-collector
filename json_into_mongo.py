@@ -31,7 +31,7 @@ def main(filespath, namefilter='.json'):
                             count += 1
                             print('   ', afile.filename)
                             with source.open(afile) as f:
-                                file_data = json.load(f)
+                                file_data = json.loads(f.read().decode('utf-8'))
                                 db_collection.insert(file_data)
                     else:
                         count += 1
