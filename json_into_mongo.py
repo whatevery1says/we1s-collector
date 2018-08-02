@@ -23,20 +23,22 @@ def main(filespath, namefilter='.json'):
         for filename in files:
             if filename.endswith('.zip'):  # scan for zip files
                 filepath = os.path.join(dirname, filename)
-                print('\n', filepath, '\n')
+                # print('\n', filepath, '\n')
                 source = zipfile.ZipFile(filepath, 'r')  # read zip
                 for afile in source.filelist:
                     if namefilter:
                         if namefilter in afile.filename:
                             count += 1
-                            print('   ', afile.filename)
+                            # print('   ', afile.filename)
                             with source.open(afile) as f:
                                 file_data = json.loads(f.read().decode('utf-8'))
                                 db_collection.insert(file_data)
                     else:
                         count += 1
-                        print('   ', afile.filename)
+                        # print('   ', afile.filename)
+        # print('   ' + str(count))
     client.close()
+    print(count)
 
 
 if __name__ == '__main__':
