@@ -14,8 +14,8 @@ def main(filespath, namefilter='.json'):
     """Loop through zip files..."""
 
     client = MongoClient('mongo', 27017)
-    db = client['analaysis']
-    db_collection = db['data-new'] # filespath
+    db = client['we1s']
+    db_collection = db['Corpus'] # filespath
 
     os.chdir(filespath)
     count = 0
