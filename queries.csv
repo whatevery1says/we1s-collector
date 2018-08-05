@@ -1,9 +1,6 @@
 source_title,source_id,keyword_string,begin_date,end_date,result_filter
-ExpandMe ChicagoDH 1,163823,body(plural(humanities)) or hlead(plural(humanities)),2000...2004,,humanities
-Invalid Date ChicagoDH 1,163823,body(plural(humanities)) or hlead(plural(humanities)),2017,2018,humanities
-Invalid Date ChicagoDH 2,163823,body(plural(humanities)) or hlead(plural(humanities)),2017-02-01,2017-01-01,humanities
 Chicago Daily Herald,163823,body(plural(humanities)) or hlead(plural(humanities)),2017-01-01,2017-01-31,humanities
 BBC Monitoring: International Reports,10962,body(plural(humanities)) or hlead(plural(humanities)),2017-01-01,2017-01-31,humanities
+The Guardian (London),138620,body(plural(arts)) or hlead(plural(arts)),2017-01-01,2017-01-15,the arts
 TVEyes - BBC 1 Wales,402024,body(plural(humanities)) or hlead(plural(humanities)),2017-01-01,2017-01-31,humanities
 Washington Post,8075,body(liberal PRE/1 plural(arts)) or hlead(liberal PRE/1 plural(arts)),2017-01-01,2017-01-31,liberal arts
-The Guardian (London),138620,body(plural(arts)) or hlead(plural(arts)),2017-01-01,2017-01-15,the arts
