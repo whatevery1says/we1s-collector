@@ -1,0 +1,2 @@
+source_title,source_id,keyword_string,begin_date,end_date,result_filter
+ExpandMe ChicagoDH 1,163823,body(plural(humanities)) or hlead(plural(humanities)),2000...2004,,humanities
