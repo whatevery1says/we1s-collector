@@ -122,9 +122,11 @@ def search_query(session, query_idx, qrow, bagify=True, result_filter='',
                 if result_filter and not re.search(result_filter,
                                                    article['content'], re.IGNORECASE):
                     article_filename = str(qrow['source_id']) + '_' + name + '(no-exact-match).json'
+                    article_xml_filename = str(qrow['source_id']) + '_' + name + '(no-exact-match).xml'
                     if zip_output:
                         zip_map = zip_out_no_exact
                         zip_map.writestr(article_filename, json.dumps(article, indent=2))
+                        zip_map.writestr(article_xml_filename, article)
                     else:
                         article_filepath = os.path.join(outpath, article_filename)
                         with open(article_filepath, 'w') as outfile:
@@ -132,9 +134,11 @@ def search_query(session, query_idx, qrow, bagify=True, result_filter='',
                         article_filename_list.append(article_filename)
                 else:
                     article_filename = str(qrow['source_id']) + '_' + name + '.json'
+                    article_xml_filename = str(qrow['source_id']) + '_' + name + '.xml'
                     if zip_output:
                         zip_map = zip_out
                         zip_map.writestr(article_filename, json.dumps(article, indent=2))
+                        zip_map.writestr(article_xml_filename, article)
                     else:
                         article_filepath = os.path.join(outpath, article_filename)
                         with open(article_filepath, 'w') as outfile:
