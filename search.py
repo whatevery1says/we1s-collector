@@ -126,7 +126,7 @@ def search_query(session, query_idx, qrow, bagify=True, result_filter='',
                     if zip_output:
                         zip_map = zip_out_no_exact
                         zip_map.writestr(article_filename, json.dumps(article, indent=2))
-                        zip_map.writestr(article_xml_filename, article)
+                        # zip_map.writestr(article_xml_filename, article)
                     else:
                         article_filepath = os.path.join(outpath, article_filename)
                         with open(article_filepath, 'w') as outfile:
@@ -138,7 +138,7 @@ def search_query(session, query_idx, qrow, bagify=True, result_filter='',
                     if zip_output:
                         zip_map = zip_out
                         zip_map.writestr(article_filename, json.dumps(article, indent=2))
-                        zip_map.writestr(article_xml_filename, article)
+                        #zip_map.writestr(article_xml_filename, article)
                     else:
                         article_filepath = os.path.join(outpath, article_filename)
                         with open(article_filepath, 'w') as outfile:
