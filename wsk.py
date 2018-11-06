@@ -393,7 +393,6 @@ class WSK:
             time_delta -= 1
           else: print(' * Abort!')
     if return_results:
-      print(user_results)
       yield user_results
 
 
