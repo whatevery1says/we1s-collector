@@ -687,6 +687,11 @@ class Document(dict):
     try:
       bad_date = '1900-01-01T00:00:00Z'
       date_str = soup.find('div', {'class': 'PUB-DATE'}).get_text()
+      if date_str:
+        return date_str
+      date_str = soup.find('div', {'class': 'DATE'}).get_text()
+      if date_str:
+        return date_str
       date = dateparser.parse(date_str)
       date_out = date.strftime('%Y-%m-%dT%H:%M:%SZ')
       if not date_out:
