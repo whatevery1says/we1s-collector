@@ -75,8 +75,11 @@ class WSK:
     try:
       self.auth_token = BeautifulSoup(response.text, 'lxml').find('binarysecuritytoken').string
       return self.auth_token
-    except AttributeError:
+    except AttributeError as e:
       print(' * Authentication failure. Please verify your credentials and environment')
+      print(' * url:      ', url)
+      print(' * response: ', response)
+      print(' * e:        ', e)
       sys.exit()
 
 
