@@ -687,18 +687,29 @@ class Document(dict):
     @param {BeautifulSoup} soup: a documentcontainer tag
     @returns {str}: the pub date attribute from a document
     '''
+    bad_date = '1900-01-01T00:00:00Z'
     try:
-      bad_date = '1900-01-01T00:00:00Z'
-      date_str = soup.find('div', {'class': 'PUB-DATE'}).get_text()
-      if not date_str:
-        date_str = soup.find('div', {'class': 'DATE'}).get_text()
-      date = dateparser.parse(date_str)
+      soup_date = soup.find('div', {'class': 'PUB-DATE'})
+      if not soup_date:
+          soup_date = soup.find('div', {'class': 'DATE'})
+          print("DATE")
+      date_str = soup_date.get_text()
+      print("date_str: ", date_str)
+      date = ''
+      while not date:
+          try:
+              date = dateparser.parse(date_str)
+              print(' parsed: ', date)
+          except Exception as exc:
+              print(' ! error parsing doc_pub_date', exc)
+              date_str = ' '.join(date_str.split(' ')[:-1])
       date_out = date.strftime('%Y-%m-%dT%H:%M:%SZ')
       if not date_out:
           date_out = bad_date
       print(date_out)
       return date_out
     except Exception as exc:
+      self.verbose = True
       if self.verbose: print(' ! error parsing doc_pub_date', exc)
       return ''
 
