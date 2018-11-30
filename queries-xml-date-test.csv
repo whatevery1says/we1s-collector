@@ -1,8 +1,0 @@
-source_title,source_id,keyword_string,begin_date,end_date,result_filter
-The New York Times,6742,body(plural(humanities)) or hlead(plural(humanities)),1984-01-01,1984-01-31,humanities
-The New York Times,6742,body(plural(humanities)) or hlead(plural(humanities)),2012-01-01,2012-01-31,humanities
-University Wire,172244,body(plural(humanities)) or hlead(plural(humanities)),2002-09-15,2002-09-20,humanities
-Chronicle of Higher Education,171267,body(plural(humanities)) or hlead(plural(humanities)),1998-07-01,1998-07-31,humanities
-Edinburgh Evening News,377169,body(plural(humanities)) or hlead(plural(humanities)),2004-01-01,2004-12-31,humanities
-The Guardian,138620,body(plural(humanities)) or hlead(plural(humanities)),1997-01-01,1997-01-31,humanities
-

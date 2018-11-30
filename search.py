@@ -116,7 +116,6 @@ def search_query(session, query_idx, qrow, bagify=True, result_filter='',
                 article['name'] = name
                 article['namespace'] = "we1sv2.0"
                 article['metapath'] = "Corpus," + slug_full + ",RawData"
-                article['database'] = "LexisNexis"
             except (KeyError, TypeError) as error:
                 logging.info(name, 'add keys failed', error)
             logging.debug(pprint.pformat(article))
