@@ -10,6 +10,7 @@ import json
 import requests
 import time
 import sys
+import re
 
 class WSK:
   def __init__(self, environment='', project_id=''):
@@ -620,6 +621,8 @@ class Document(dict):
     formatted['pub'] = self.get_doc_pub(doc_soup)
     formatted['pub_date'] = self.get_doc_pub_date(doc_soup)
     formatted['length'] = self.get_doc_length(doc_soup)
+    formatted['copyright'] = self.get_doc_copyright(doc_soup)
+    formatted['author'] = self.get_doc_author(doc_soup)
     return formatted
 
 
@@ -725,6 +728,40 @@ class Document(dict):
       return length if length else ''
     except Exception as exc:
       if self.verbose: print(' ! error parsing doc_length', exc)
+      return ''
+  
+  def get_doc_copyright(self, soup):
+    '''
+    @param {BeautifulSoup} soup: a documentcontainer tag
+    @returns {str}: the copyright attribute of a document
+    '''
+    try:
+      copyright = soup.find('div', {'class': 'COPYRIGHT'}).string
+      # to take out "Copyright YYYY" text; trying to get above to work first:
+      # copyright = re.sub('Copyright [0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f] ', '', copyright)
+      if copyright:
+        return copyright
+      copyright = soup.find('div', {'class': 'PUB-COPYRIGHT'}).string
+      # to take out "Copyright YYYY" text; trying to get above to work first:
+      # copyright = re.sub('Copyright [0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f] ', '', copyright)
+    except Exception as exc:
+      self.verbose = True
+      if self.verbose: print(' ! error parsing doc_copyright', exc)
+      return ''
+  
+  def get_doc_author(self, soup):
+    '''
+    @param {BeautifulSoup} soup: a documentcontainer tag
+    @returns {str}: the author attribute of a document
+    '''
+    try:
+      author = soup.find('div', {'class': 'BYLINE'}).string
+      author = re.sub('By ', '', author)
+      if author:
+        return author
+    except Exception as exc:
+      self.verbose = True
+      if self.verbose: print(' ! error parsing doc_author', exc)
       return ''
 
 ##
