@@ -111,7 +111,7 @@ def search_query(session, query_idx, qrow, bagify=True, result_filter='',
                     copyright_txt = re.sub('Copyright [0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f] ', '', copyright_txt)
                 article['copyright'] = copyright_txt
             except KeyError as error:
-                logging.info(name, 'copyright info failed', error)      
+                logging.info(name, 'copyright info failed', error)             
             try:  # move dictionary keys
                 body_divs = soup.find_all("div", {"class":"BODY"})
                 txt = ''
