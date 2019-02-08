@@ -24,10 +24,10 @@ if __name__ == '__main__':
     PARSER = argparse.ArgumentParser(description=__doc__,
                                      usage='use "%(prog)s --help" for more information',
                                      formatter_class=argparse.RawTextHelpFormatter)
-    PARSER.add_argument('-b', '--bagify', action='store_true', help='')
+    PARSER.add_argument('-b', '--bagify', action='store_true', help='bagify article content, false by default ')
     PARSER.add_argument('-o', '--outpath', default='', help='output path, e.g. "../output"')
     PARSER.add_argument('-q', '--queries', help='specify query file path, e.g. queries.csv')
-    PARSER.add_argument('-z', '--zip', action='store_false', help='zip the json output')
+    PARSER.add_argument('-z', '--zip', action='store_false', help='zip the json output, true by default')
     PARSER.add_argument('-s', '--scrub', action='store_false', help='scrub article content, true by default')
     if not sys.argv[1:]:
         PARSER.print_help()
