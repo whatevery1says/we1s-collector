@@ -17,7 +17,7 @@ def main(args):
 
     if args.queries:
         search_querylist(session, fname=args.queries, bagify=args.bagify,
-                         outpath=args.outpath, zip_output=args.zip)
+                         outpath=args.outpath, zip_output=args.zip, scrub=args.scrub)
 
 
 if __name__ == '__main__':
@@ -28,6 +28,7 @@ if __name__ == '__main__':
     PARSER.add_argument('-o', '--outpath', default='', help='output path, e.g. "../output"')
     PARSER.add_argument('-q', '--queries', help='specify query file path, e.g. queries.csv')
     PARSER.add_argument('-z', '--zip', action='store_false', help='zip the json output')
+    PARSER.add_argument('-s', '--scrub', action='store_false', help='scrub article content, true by default')
     if not sys.argv[1:]:
         PARSER.print_help()
         PARSER.exit()

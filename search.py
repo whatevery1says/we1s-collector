@@ -172,7 +172,7 @@ def search_query(session, query_idx, qrow, bagify=True, result_filter='',
             zip_out_no_exact.close()
 
 
-def search_querylist(session, fname='queries.csv', bagify=True, outpath='', zip_output=False):
+def search_querylist(session, fname='queries.csv', bagify=True, outpath='', zip_output=False, scrub=True):
     """For a list of queries in csv format:
 
         source_title,source_id,keyword_string,begin_date,end_date
@@ -218,7 +218,8 @@ def search_querylist(session, fname='queries.csv', bagify=True, outpath='', zip_
                              result_filter=row['result_filter'],
                              bagify=bagify,
                              outpath=outpath,
-                             zip_output=zip_output
+                             zip_output=zip_output,
+                             scrub=scrub
                             )
 
 
@@ -233,5 +234,5 @@ logging.basicConfig(datefmt='%m/%d/%Y %I:%M:%S %p',
 
 if __name__ == "__main__":
     MY_SESSION = get_authenticated_session()
-    search_querylist(MY_SESSION, 'queries.csv', bagify=False, zip_output=True)
+    search_querylist(MY_SESSION, 'queries.csv', bagify=False, zip_output=True, scrub=True)
     logging.info("done\n\n")
