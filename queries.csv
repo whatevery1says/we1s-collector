@@ -1,6 +1,15 @@
-source_title,source_id,keyword_string,begin_date,end_date,result_filter
-Chicago Daily Herald,163823,body(plural(humanities)) or hlead(plural(humanities)),2017-01-01,2017-01-31,humanities
-BBC Monitoring: International Reports,10962,body(plural(humanities)) or hlead(plural(humanities)),2017-01-01,2017-01-31,humanities
-The Guardian (London),138620,body(plural(arts)) or hlead(plural(arts)),2017-01-01,2017-01-15,the arts
-TVEyes - BBC 1 Wales,402024,body(plural(humanities)) or hlead(plural(humanities)),2017-01-01,2017-01-31,humanities
-Washington Post,8075,body(liberal PRE/1 plural(arts)) or hlead(liberal PRE/1 plural(arts)),2017-01-01,2017-01-31,liberal arts
+Timestamp,source_title,source_id,keyword_string,begin_date,end_date,result_filter
+10/18/2018 15:06:54,Chronicle of Higher Education,171267,body(plural(humanities)) or hlead(plural(humanities)),1997...2018,,humanities
+10/18/2018 15:15:11,Education Week,313401,body(plural(humanities)) or hlead(plural(humanities)),2004...2018,,humanities
+10/18/2018 15:23:22,University Wire,172244,body(plural(humanities)) or hlead(plural(humanities)),1997...2018,,humanities
+10/30/2018 16:04:23,The New York Times,6742,body(singular(science)) or hlead(singular(science)),2012...2017,,science
+10/30/2018 16:06:28,The New York Times,6742,body(singular(STEM)) or hlead(singular(STEM)),2012...2017,,STEM
+10/30/2018 16:09:12,The New York Times,6742,body(plural(humanities)) or hlead(plural(humanities)) AND body(singular(science)) or hlead(singular(science)),2012...2017,,humanities
+10/30/2018 16:10:24,The New York Times,6742,body(singular(literature)) or hlead(singular(literature)),2012...2017,,literature
+10/30/2018 16:11:57,The New York Times,6742,body(singular(history)) or hlead(singular(history)),2012...2017,,history
+10/30/2018 16:14:02,The New York Times,6742,body(art PRE/1 singular(history)) or hlead(art PRE/1 singular(history)),2012...2017,,art history
+10/30/2018 16:15:36,The New York Times,6742,body(singular(philosophy)) or hlead(singular(philosophy)),2012...2017,,philosophy
+10/30/2018 16:17:30,The New York Times,6742,body(English PRE/1 singular(literature)) or hlead(English PRE/1 singular(literature)),2012...2017,,English literature
+10/30/2018 16:18:35,The New York Times,6742,body(singular(NEH)) or hlead(singular(NEH)),2012...2017,,NEH
+10/30/2018 16:19:37,The New York Times,6742,body(singular(NEA)) or hlead(singular(NEA)),2012...2017,,NEA
+10/30/2018 16:20:53,The New York Times,6742,body(plural(humanities)) or hlead(plural(humanities)) AND body(singular(funding)) or hlead(singular(funding)),2012...2017,,humanities

@@ -75,8 +75,11 @@ class WSK:
     try:
       self.auth_token = BeautifulSoup(response.text, 'lxml').find('binarysecuritytoken').string
       return self.auth_token
-    except AttributeError:
+    except AttributeError as e:
       print(' * Authentication failure. Please verify your credentials and environment')
+      print(' * url:      ', url)
+      print(' * response: ', response)
+      print(' * e:        ', e)
       sys.exit()
 
 
@@ -617,6 +620,8 @@ class Document(dict):
     formatted['pub'] = self.get_doc_pub(doc_soup)
     formatted['pub_date'] = self.get_doc_pub_date(doc_soup)
     formatted['length'] = self.get_doc_length(doc_soup)
+    formatted['section'] = self.get_doc_section(doc_soup)
+    formatted['author'] = self.get_doc_author(doc_soup)
     return formatted
 
 
@@ -684,16 +689,29 @@ class Document(dict):
     @param {BeautifulSoup} soup: a documentcontainer tag
     @returns {str}: the pub date attribute from a document
     '''
+    bad_date = '1900-01-01T00:00:00Z'
     try:
-      bad_date = '1900-01-01T00:00:00Z'
-      date_str = soup.find('div', {'class': 'PUB-DATE'}).get_text()
-      date = dateparser.parse(date_str)
+      soup_date = soup.find('div', {'class': 'PUB-DATE'})
+      if not soup_date:
+          soup_date = soup.find('div', {'class': 'DATE'})
+          print("DATE")
+      date_str = soup_date.get_text()
+      print("date_str: ", date_str)
+      date = ''
+      while not date:
+          try:
+              date = dateparser.parse(date_str)
+              print(' parsed: ', date)
+          except Exception as exc:
+              print(' ! error parsing doc_pub_date', exc)
+              date_str = ' '.join(date_str.split(' ')[:-1])
       date_out = date.strftime('%Y-%m-%dT%H:%M:%SZ')
       if not date_out:
           date_out = bad_date
       print(date_out)
       return date_out
     except Exception as exc:
+      self.verbose = True
       if self.verbose: print(' ! error parsing doc_pub_date', exc)
       return ''
 
@@ -710,7 +728,44 @@ class Document(dict):
     except Exception as exc:
       if self.verbose: print(' ! error parsing doc_length', exc)
       return ''
+      
+  
+  def get_doc_section(self, soup):
+    '''
+    @param {BeautifulSoup} soup: a documentcontainer tag
+    @returns {str}: the newspaper section attribute of a document
+    '''
+    try: 
+      section = soup.find('div', {'class': 'SECTION'}).string 
+      if section:
+        return section
+    except Exception as exc:
+      # for some reason this only works if this option is brought down to the except portion of try except.
+      # compare to get_doc_pub, for instance, which works without this structure.
+      # but in this case, if soup fails to find anything in <div class = "SECTION">, it craps out and goes to except, returning "No pub section."
+      # moving the second option of where to find section info into except fixes this.
+      section = soup.find('div', {'class': 'SECTION-INFO'}).string
+      if section:
+        return section
+      else:
+        if self.verbose: print(' ! error parsing doc_section', exc)
+        return 'No pub section'
+  
 
+  def get_doc_author(self, soup):
+    '''
+    @param {BeautifulSoup} soup: a documentcontainer tag
+    @returns {str}: the author attribute of a document
+    '''
+    try:
+      author = soup.find('div', {'class': 'BYLINE'}).string
+      author = author.replace('By ', '')
+      if author:
+        return author
+    except Exception as exc:
+      if self.verbose: print(' ! error parsing doc_author', exc)
+      return ''
+      
 ##
 # Helpers
 ##

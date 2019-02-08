@@ -95,12 +95,24 @@ def search_query(session, query_idx, qrow, bagify=True, result_filter='',
     for group_idx, group in enumerate(query_result):
         for article_idx, article in enumerate(group):
             name = slug_full  + '_' + str(query_idx) + '_' + str(group_idx) + '_' + str(article_idx)
+            article_full_text = article.pop('full_text')
             try:  # move dictionary keys
                 article['title'] = article.pop('headline', "untitled")
             except KeyError as error:
                 logging.info(name, 'move headline to title failed', error)
+            try: # move dictionary keys
+                soup = BeautifulSoup(article_full_text, 'lxml')
+                all_copyright = soup.find('div', {'class': 'PUB-COPYRIGHT'})
+                if not all_copyright:
+                    all_copyright = soup.find('div', {'class': 'COPYRIGHT'})
+                copyright_txt = ''
+                for copyright in all_copyright:
+                    copyright_txt = str(copyright) # I don't know why the text isn't already a string, but it isn't, so have to make it one.
+                    copyright_txt = re.sub('Copyright [0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f] ', '', copyright_txt)
+                article['copyright'] = copyright_txt
+            except KeyError as error:
+                logging.info(name, 'copyright info failed', error)             
             try:  # move dictionary keys
-                soup = BeautifulSoup(article.pop('full_text'), 'lxml')
                 body_divs = soup.find_all("div", {"class":"BODY"})
                 txt = ''
                 for body_div in body_divs:
@@ -115,6 +127,7 @@ def search_query(session, query_idx, qrow, bagify=True, result_filter='',
                 article['name'] = name
                 article['namespace'] = "we1sv2.0"
                 article['metapath'] = "Corpus," + slug_full + ",RawData"
+                article['database'] = "LexisNexis"
             except (KeyError, TypeError) as error:
                 logging.info(name, 'add keys failed', error)
             logging.debug(pprint.pformat(article))
@@ -126,7 +139,7 @@ def search_query(session, query_idx, qrow, bagify=True, result_filter='',
                     if zip_output:
                         zip_map = zip_out_no_exact
                         zip_map.writestr(article_filename, json.dumps(article, indent=2))
-                        zip_map.writestr(article_xml_filename, article)
+                        zip_map.writestr(article_xml_filename, article_full_text)
                     else:
                         article_filepath = os.path.join(outpath, article_filename)
                         with open(article_filepath, 'w') as outfile:
@@ -138,7 +151,7 @@ def search_query(session, query_idx, qrow, bagify=True, result_filter='',
                     if zip_output:
                         zip_map = zip_out
                         zip_map.writestr(article_filename, json.dumps(article, indent=2))
-                        zip_map.writestr(article_xml_filename, article)
+                        zip_map.writestr(article_xml_filename, article_full_text)
                     else:
                         article_filepath = os.path.join(outpath, article_filename)
                         with open(article_filepath, 'w') as outfile:
