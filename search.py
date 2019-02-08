@@ -17,6 +17,7 @@ from wsk import WSK
 
 import config.config as cfg
 
+from scrub.scrub import scrub as scrubber
 
 def date_validate(date_text, format_string='%Y-%m-%d'):
     """Validate a date string as YYYY-MM-DD format"""
@@ -51,7 +52,7 @@ def string_cleaner(unistr):
 
 
 def search_query(session, query_idx, qrow, bagify=True, result_filter='',
-                 outpath='', zip_output=False):
+                 outpath='', zip_output=False, scrub=True):
     """Uses a session and a query row (labeled with an arbitrary index number)
     to retrieve an article collection and cache their word lists in JSON format.
     The qrow format is a dict with keys:
@@ -118,8 +119,13 @@ def search_query(session, query_idx, qrow, bagify=True, result_filter='',
                 for body_div in body_divs:
                     txt = txt + body_div.get_text(separator=u' ')
                 txt = string_cleaner(txt)
+                if scrub:
+                    article['content-unscrubbed'] = txt
+                    txt = scrubber(txt)
                 if bagify:
                     txt = ' '.join(sorted(txt.split(' '), key=str.lower))
+                    article.pop('content-unscrubbed')
+                    # if content_raw delete content_raw
                 article['content'] = txt
             except (KeyError, TypeError) as error:
                 logging.info(name, 'clean contents failed', error)
