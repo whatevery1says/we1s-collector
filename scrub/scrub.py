@@ -20,7 +20,7 @@ __email__ = "scott.kleinman@csun.edu"
 import os, re, codecs, ftfy
 import unicodedata as ud
 try:
-    from scripts.scrub.config import *
+    from scrub.config import *
 except:
     from config import *
 
