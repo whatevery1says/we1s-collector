@@ -666,16 +666,16 @@ class Document(dict):
     @returns {str}: the publication attribute of a document
     '''
     try:
-      pub = soup.find('meta', {'name': 'sourceName'})['content']
-      if pub:
-        return pub
       pub = soup.find('div', {'class': 'PUB'}).string
       if pub:
         return pub
-      return default_name
     except Exception as exc:
-      if self.verbose: print(' ! error parsing doc_pub', exc)
-      return ''
+      pub = soup.find('meta', {'name': 'sourceName'})['content']
+      if pub:
+        return pub
+      else:
+        if self.verbose: print(' ! error parsing doc_pub', exc)
+        return default_name
 
 
   def get_doc_pub_date(self, soup):
