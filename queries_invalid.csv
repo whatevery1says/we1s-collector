@@ -1,8 +1,0 @@
-source_title,source_id,keyword_string,begin_date,end_date,result_filter
-Invalid Date Years Only,163823,humanities,2017,2018,humanities
-Invalid Date Begin None,163823,humanities,,2017-02-01,humanities
-Invalid Date End None,163823,humanities,2017-01-01,,humanities
-Invalid Date Range Reversed,163823,humanities,2017-02-01,2017-01-01,humanities
-Invalid Date YY-MM-DD,163823,humanities,17-02-01,17-01-01,humanities
-Invalid Query None,163823,,2017-01-01,2017-02-01,humanities
-Invalid Source ID None,,humanities,2017-01-01,2017-02-01,humanities
