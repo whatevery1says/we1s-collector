@@ -112,7 +112,7 @@ def search_query(session, query_idx, qrow, bagify=True, result_filter='',
                     copyright_txt = re.sub('Copyright [0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f] ', '', copyright_txt)
                 article['copyright'] = copyright_txt
             except KeyError as error:
-                logging.info(name, 'copyright info failed', error)             
+                logging.info(name, 'copyright info failed', error)      
             try:  # move dictionary keys
                 body_divs = soup.find_all("div", {"class":"BODY"})
                 txt = ''
@@ -129,6 +129,13 @@ def search_query(session, query_idx, qrow, bagify=True, result_filter='',
                 article['content'] = txt
             except (KeyError, TypeError) as error:
                 logging.info(name, 'clean contents failed', error)
+            try: # university wire title pre 2007
+                university_wire_title = re.search('\\(C\\) ([0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f][0-9A-Fa-f]) (.+) via U-WIRE', txt)
+                if university_wire_title:
+                        university_wire_title = university_wire_title.group(2)
+                        article['pub'] = university_wire_title 
+            except (KeyError, TypeError) as error:
+                logging.info(name, 'no university wire title', error)
             try:  # add dictionary keys
                 article['name'] = name
                 article['namespace'] = "we1sv2.0"
