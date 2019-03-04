@@ -638,13 +638,13 @@ class Document(dict):
       headline = soup.find('div', {'class': 'HEADLINE'}).string
       if headline:
       	return headline
+    except Exception as exc:
       headline = soup.find('h1').string
       if headline:
           return headline
-      return ''
-    except Exception as exc:
-      if self.verbose: print(' ! error parsing headline', exc)
-      return ''
+      else:
+        if self.verbose: print(' ! error parsing headline', exc)
+        return ''
 
 
   def get_doc_attachment_id(self, soup):
