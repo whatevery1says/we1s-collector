@@ -692,9 +692,10 @@ class Document(dict):
     bad_date = '1900-01-01T00:00:00Z'
     try:
       soup_date = soup.find('div', {'class': 'PUB-DATE'})
-      if not soup_date:
+      if not soup_date: 
           soup_date = soup.find('div', {'class': 'DATE'})
-          print("DATE")
+          if not soup_date:
+            soup_date = soup.find('div', {'class': 'DISPLAY-DATE'})
       date_str = soup_date.get_text()
       print("date_str: ", date_str)
       date = ''
