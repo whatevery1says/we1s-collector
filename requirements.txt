@@ -1,9 +1,0 @@
-beautifulsoup4==4.5.1
-ftfy==5.5.1
-get-docker-secret==1.0.0
-lxml==3.6.4
-pymongo==3.3.1
-python-dateutil==2.7.3
-requests==2.20.0
-Unidecode==1.0.22
-wsk==0.1.9
