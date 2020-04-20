@@ -1,5 +1,13 @@
 # we1s-collector
 
+> **Archived**
+> 
+> With the retirement of the Web Services Kit (WSK) API by LexisNexis 
+> around 2019-07, core features of the collecter are no longer functional.
+> A new API -- along with new document format -- requires new connection,
+> query code, and preprocessing code.
+
+
 The collector is a system for searching, paging, and ingesting article data from new sources (with a current focus on sources from the Lexis-Nexis web-services kit API). Its interface to Lexis-Nexis is built on a fork of the Yale DH Lab “lexis-nexis-wsk,” a Python package with convenience wrappers for accessing Lexis Nexis WSK API.
 
 It consists of wrappers and utilities for processing queries into collections of news article metadata, with a "bagify" feature to transform article content into word lists. Input may be a comma-delimited lists of query jobs; output is into WE1S schema JSON files (one per article), and may be batch-packaged into zip files. It comes with a command line batch-query interface, `searchcmd.py`, and a single-query interface, `search.py`.
